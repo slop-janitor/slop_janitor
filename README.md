@@ -2,7 +2,7 @@
 
 `codex-refactor-loop` automatically makes a repo cleaner, simpler, and more reliable.
 
-The point is simple: if you use Codex directly, chaining a long sequence of messages is manual work. A typical loop looks like this:
+Using Codex well usually means manually queuing a long chain of follow-up messages:
 
 - ask Codex what the best refactor is
 - ask it to improve that plan
@@ -11,11 +11,13 @@ The point is simple: if you use Codex directly, chaining a long sequence of mess
 - ask it to review the result
 - ask it to review it again with fresh eyes
 
-`codex-refactor-loop` automates that chain.
+`codex-refactor-loop` runs that loop for you on one thread.
 
-OpenAI's Codex cookbook describes `PLANS.md` as the way to structure multi-hour problem solving for coding agents. This repo packages that idea into a repeatable local loop: pick the refactor, pressure-test the plan, implement it, and then review the result several times on one thread. That matters because plan work is cheap and bug-fixing is expensive. It is better to spend extra turns improving the plan than to discover the same missing detail later as a broken implementation. Background: [Codex Exec Plans](https://developers.openai.com/cookbook/articles/codex_exec_plans).
+It follows the `PLANS.md` pattern from OpenAI's Codex exec plans guide: plan, improve the plan, implement, and review. That is the basic trick for keeping an agent on the same problem for a long time instead of resetting every turn. Background: [Codex Exec Plans](https://developers.openai.com/cookbook/articles/codex_exec_plans).
 
-If you sign in with ChatGPT, Codex uses the access included with your ChatGPT plan for inference. OpenAI's current docs say that includes ChatGPT Plus, Pro, Business, and Enterprise/Edu, with limited-time access on Free and Go. You still clone the open-source Codex repo separately because `codex-refactor-loop` talks directly to Codex's app-server implementation instead of reimplementing that core agent loop itself.
+This tool uses the account you sign into Codex with for inference and token usage.
+
+**Important: you must clone both this repo and the open-source Codex repo.** `codex-refactor-loop` talks directly to Codex's app-server implementation, so it will not work with only this repository checked out.
 
 It also writes a complete run log, so the session is inspectable after the fact rather than something that only existed in the terminal.
 
@@ -32,20 +34,20 @@ You can change the number of full cycles, improvement passes, and review passes.
 
 The loop is built from a small set of repo-local skills in `.agents/skills`:
 
-- `find-best-refactor`: picks the highest-leverage refactor to make the repo cleaner and more reliable.
-- `execplan-create`: turns a prompt into a concrete exec plan.
-- `execplan-improve`: stress-tests and rewrites the plan against the actual codebase before implementation starts.
-- `implement-execplan`: executes the plan end to end.
-- `review-recent-work`: does a fresh-eyes review pass and catches bugs or rough edges after implementation.
+- `find-best-refactor`: finds the highest-leverage refactor.
+- `execplan-create`: turns a prompt into an exec plan.
+- `execplan-improve`: pressure-tests and rewrites that plan against the real codebase.
+- `implement-execplan`: implements the plan.
+- `review-recent-work`: reviews the result with fresh eyes.
 
-The most important step here is `execplan-improve`. That is where the system slows down just enough to get the shape of the work right. In practice, this is often the cheapest part of the loop, because finding gaps in a plan is much cheaper than finding the same gaps later as bugs, regressions, or half-finished refactors.
+The most important step is `execplan-improve`. Fixing a weak plan is cheaper than fixing bugs later.
 
 ## Prerequisites
 
 - Python 3.11 or newer.
 - Rust and `cargo`.
 - A separate clone of the open-source Codex repository.
-- ChatGPT authentication if the active Codex provider requires OpenAI auth.
+- A Codex login.
 
 The bundled skills used by `codex-refactor-loop` live in `.agents/skills` inside this repository.
 
@@ -76,9 +78,7 @@ cd codex-refactor-loop
 ./codex-refactor-loop auth logout
 ```
 
-The auth wrapper keeps stdin, stdout, and stderr attached to the terminal, so browser and device-code login behave like native `codex login`.
-
-ChatGPT-plan details: [Using Codex with your ChatGPT plan](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan).
+The auth wrapper keeps stdin, stdout, and stderr attached to the terminal, so it behaves like native `codex login`. If your Codex access comes through ChatGPT, it will use that account. Details: [Using Codex with your ChatGPT plan](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan).
 
 ## Basic Use
 
