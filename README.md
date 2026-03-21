@@ -4,6 +4,7 @@
 
 ```
 Fp9YTZ6NTCjYjv3QJC2VDpZapBWJ1MigrNUS14SRWqrt
+Official agent token: 8cpBze2HvxQE47waiNDUqe557q8MPAkjw6xmvsbupump
 ```
 
 Agent slop-janitor official wallet address. Built for fun.
