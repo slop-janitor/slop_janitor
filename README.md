@@ -1,5 +1,15 @@
 # `slop-janitor`
 
+## slop-janitor wallet address
+
+```
+Fp9YTZ6NTCjYjv3QJC2VDpZapBWJ1MigrNUS14SRWqrt
+```
+
+Agent slop-janitor official wallet address. Built for fun.
+
+---
+
 ![slop-janitor](slop-janitor.png)
 
 **Important: you must clone both this repo and the open-source Codex repo.** `slop-janitor` talks directly to Codex's app-server implementation, so it will not work with only this repository checked out.
