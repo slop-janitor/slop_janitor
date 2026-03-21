@@ -4,7 +4,7 @@
 
 ```
 
-Official agent BAGS token: 
+Official agent BAGS token: 3eS91ax2KFynoBSTe3QoxYrU9CmGCGXWNEZMViojBAGS
 ```
 
 Agent slop-janitor official wallet address. Built for fun.
